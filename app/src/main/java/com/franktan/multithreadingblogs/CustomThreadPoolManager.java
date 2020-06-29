@@ -90,8 +90,11 @@ public class CustomThreadPoolManager {
 
     // Pass the message to the UI thread
     public void sendMessageToUiThread(Message message){
-        if(uiThreadCallbackWeakReference != null && uiThreadCallbackWeakReference.get() != null) {
-            uiThreadCallbackWeakReference.get().publishToUiThread(message);
+        if(null != uiThreadCallbackWeakReference) {
+            final UiThreadCallback uiThreadCallback = uiThreadCallbackWeakReference.get();
+            if(null != uiThreadCallback) {
+                uiThreadCallback.publishToUiThread(message);
+            }
         }
     }
 
