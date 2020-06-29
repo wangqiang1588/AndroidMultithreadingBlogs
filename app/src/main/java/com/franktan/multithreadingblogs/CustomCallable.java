@@ -32,10 +32,11 @@ public class CustomCallable implements Callable {
                     String.valueOf(Thread.currentThread().getId()) + " " +
                     String.valueOf(Thread.currentThread().getName()) + " completed");
 
-            if(mCustomThreadPoolManagerWeakReference != null
-                    && mCustomThreadPoolManagerWeakReference.get() != null) {
-
-                mCustomThreadPoolManagerWeakReference.get().sendMessageToUiThread(message);
+            if(null != mCustomThreadPoolManagerWeakReference) {
+                final CustomThreadPoolManager customThreadPoolManager = mCustomThreadPoolManagerWeakReference.get();
+                if(null != customThreadPoolManager) {
+                    customThreadPoolManager.sendMessageToUiThread(message);
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

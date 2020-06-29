@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements UiThreadCallback 
             mHandlerThread.quit();
             mHandlerThread.interrupt();
         }
+        mCustomThreadPoolManager.cancelAllTasks();
+        mUiHandler.removeCallbacksAndMessages(null);
     }
 
     // onClick handler for Send Runnable button
@@ -133,9 +135,13 @@ public class MainActivity extends AppCompatActivity implements UiThreadCallback 
                 // Our communication protocol for passing a string to the UI thread
                 case Util.MESSAGE_ID:
                     Bundle bundle = msg.getData();
-                    String messsageText = bundle.getString(Util.MESSAGE_BODY, Util.EMPTY_MESSAGE);
-                    if(mWeakRefDisplay != null && mWeakRefDisplay.get() != null)
-                        mWeakRefDisplay.get().append(Util.getReadableTime() + " " + messsageText + "\n");
+                    String messageText = bundle.getString(Util.MESSAGE_BODY, Util.EMPTY_MESSAGE);
+                    if(null != mWeakRefDisplay) {
+                        TextView refDisplay = mWeakRefDisplay.get();
+                        if(null != refDisplay) {
+                            mWeakRefDisplay.get().append(Util.getReadableTime() + " " + messageText + "\n");
+                        }
+                    }
                     break;
                 default:
                     break;

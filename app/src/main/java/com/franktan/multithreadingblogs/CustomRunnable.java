@@ -28,8 +28,11 @@ public class CustomRunnable implements Runnable {
             Message message = Util.createMessage(Util.MESSAGE_ID,
                     "Thread " + String.valueOf(Thread.currentThread().getId()) + " completed");
 
-            if(uiThreadCallbackWeakReference != null && uiThreadCallbackWeakReference.get() != null) {
-                uiThreadCallbackWeakReference.get().publishToUiThread(message);
+            if(null != uiThreadCallbackWeakReference) {
+                final UiThreadCallback uiThreadCallback = uiThreadCallbackWeakReference.get();
+                if(null != uiThreadCallback) {
+                    uiThreadCallback.publishToUiThread(message);
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
